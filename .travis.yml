@@ -28,6 +28,8 @@ stages:
   - <<: *stage
     name: bdd-tests
   - <<: *stage
+    name: cypress-tests
+  - <<: *stage
     name: build
   - name: deploy
     if: branch = development AND type = push OR tag =~ ^v2
@@ -96,7 +98,16 @@ jobs:
       - node  ./demo/dist/server.js &
       - sleep 3
       script:
-      - npm run lint-bdd
+#      - npm run lint-bdd
+      - webdriver-manager update --standalone
+      - protractor ./protractor.cucumber.js
+
+#     test cypress
+    - stage: cypress-tests
+      before_script:
+      - npm run demo.ser
+      script:
+#      - npm run lint-bdd
       - webdriver-manager update --standalone
       - protractor ./protractor.cucumber.js
 
